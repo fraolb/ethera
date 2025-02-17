@@ -1,10 +1,12 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { FaSearch, FaUserCircle } from "react-icons/fa";
 
 const Header = () => {
+  const router = useRouter();
   return (
     <header className="flex justify-between items-center bg-white shadow-md p-4">
-      <button className="text-gray-600">Back</button>
-
       <div className="w-2/3 flex justify-center">
         <div className="w-full relative">
           <FaSearch className="absolute left-3 top-3 text-gray-400" />
@@ -17,7 +19,10 @@ const Header = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        <FaUserCircle className="text-gray-600 text-2xl" />
+        <FaUserCircle
+          className="text-gray-600 text-2xl"
+          onClick={() => router.push(`/profile`)}
+        />
         <button className="bg-orange-500 text-white px-4 py-2 rounded-md">
           Become a creator
         </button>
