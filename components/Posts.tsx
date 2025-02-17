@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import { useRouter } from "next/navigation";
 
 interface Post {
   id: number;
@@ -13,7 +15,7 @@ interface Post {
 
 const PostGrid = ({ posts }: { posts: Post[] }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
       {posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
@@ -22,8 +24,12 @@ const PostGrid = ({ posts }: { posts: Post[] }) => {
 };
 
 const PostCard = ({ post }: { post: Post }) => {
+  const router = useRouter();
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <div
+      className="bg-white rounded-lg shadow-md overflow-hidden"
+      onClick={() => router.push(`/${post.id}`)}
+    >
       <div className="relative">
         <img
           src={post.image}
