@@ -1,6 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useAccount } from "wagmi";
+import { useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import CreatorProfile from "@/components/CreatorProfile";
@@ -44,6 +46,20 @@ const dummyPosts = [
 
 const Dashboard = () => {
   const router = useRouter();
+  const { isConnected } = useAccount();
+
+  // Redirect to auth page if user is not connected
+  useEffect(() => {
+    if (!isConnected) {
+      router.push("/auth");
+    }
+  }, [isConnected, router]);
+
+  // If the user is not connected, don't render the dashboard
+  if (!isConnected) {
+    return null; // or a loading spinner
+  }
+
   return (
     <div className="flex w-full bg-gray-100">
       <div className="w-1/6">
@@ -52,12 +68,12 @@ const Dashboard = () => {
 
       <div className="flex flex-col flex-1 w-3/4">
         <Header />
-        <div className="p-6 grid grid-cols-3 gap-4">
-          <div className="col-span-2">
+        <div className="p-6 grid grid-cols-4 gap-4">
+          <div className="col-span-3">
             <Posts posts={dummyPosts} />
             <Posts posts={dummyPosts} />
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 ">
             <Promote cardTitle="trending" contents={dummyPosts} />
             <Promote cardTitle="Most Viewed" contents={dummyPosts} />
           </div>

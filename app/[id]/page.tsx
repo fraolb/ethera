@@ -48,13 +48,13 @@ const Dashboard = () => {
 
       <div className="flex flex-col flex-1 w-3/4">
         <Header />
-        <div className="p-6 grid grid-cols-3 gap-4">
-          <div className="col-span-2">
+        <div className="p-6 grid grid-cols-4 gap-4">
+          <div className="col-span-3">
             <img src={dummyPosts[0].image} />
           </div>
           <div className="flex flex-col gap-4">
-            <DonationSection />
             <SubscriptionTiers />
+            <DonationSection />
           </div>
         </div>
       </div>
