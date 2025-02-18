@@ -1,66 +1,64 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
-import { injected } from "wagmi/connectors";
-import { useState } from "react";
-import { type Chain } from "viem";
 import BgImage from "@/public/bgImage1.jpg";
 import Logo from "@/public/ETHERALogo.png";
-
-const GNOSIS_CHAIN_ID = 100; // Gnosis Chain ID
-
-const GNOSIS_CHAIN: Chain = {
-  id: 100,
-  name: "Gnosis Chain",
-  nativeCurrency: {
-    decimals: 18,
-    name: "xDai",
-    symbol: "xDAI",
-  },
-  rpcUrls: {
-    default: { http: ["https://rpc.gnosischain.com"] },
-  },
-  blockExplorers: {
-    default: { name: "GnosisScan", url: "https://gnosisscan.io" },
-  },
-};
+import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 
 const LoginPage = () => {
   const router = useRouter();
-  const { address, isConnected, chain } = useAccount();
-  const { connect } = useConnect();
-  const { disconnect } = useDisconnect();
-  const { switchChain } = useSwitchChain();
-  const [loading, setLoading] = useState(false);
 
-  // Check if the user is on the correct chain
-  const isCorrectChain = chain?.id === GNOSIS_CHAIN_ID;
+  // Use the Circles SDK context
+  const {
+    sdk,
+    isConnected,
+    setIsConnected,
+    circlesAddress,
+    initializeSdk,
+    disconnectWallet,
+  } = useContext(CirclesSDKContext);
 
-  const handleSwitchChain = async () => {
-    console.log("handleSwichChain");
+  console.log("Context values in LoginPage:", {
+    sdk,
+    isConnected,
+    circlesAddress,
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleConnectWallet = async () => {
+    setIsLoading(true);
     try {
-      await switchChain({ chainId: GNOSIS_CHAIN_ID });
+      console.log("Trying to connect...");
+      await initializeSdk();
+      setIsConnected(true);
     } catch (error) {
-      console.error("Failed to switch chain:", error);
-      // Optionally, you can prompt the user to add Gnosis Chain manually
-      if (error?.code === 4902) {
-        // MetaMask-specific error code for unrecognized chain
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [GNOSIS_CHAIN],
-        });
-      }
+      console.error("Error connecting wallet:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    if (isConnected && isCorrectChain) {
-      router.push("/");
+    if (isConnected) {
+      console.log("SDK is now connected:", sdk);
     }
-  }, [isConnected, router, isCorrectChain]);
+  }, [sdk, isConnected]);
+
+  useEffect(() => {
+    if (isConnected && circlesAddress) {
+      // Check if the user has a Circles avatar
+      sdk?.getAvatar(circlesAddress).then((avatar) => {
+        if (avatar) {
+          router.push("/dashboard"); // Redirect to dashboard if avatar exists
+        } else {
+          router.push("/onboarding"); // Redirect to onboarding if no avatar
+        }
+      });
+    }
+  }, [isConnected, circlesAddress, router, sdk]);
 
   return (
     <div className="relative h-screen w-full bg-cover bg-center flex flex-col items-center text-white px-6 md:px-16">
@@ -72,62 +70,43 @@ const LoginPage = () => {
         priority
         className="absolute inset-0 z-0 object-cover"
       />
-      <div className="flex items-center justify-center h-screen ">
+      <div className="flex items-center justify-center h-screen">
         <div className="bg-white bg-opacity-75 p-6 rounded-lg shadow-lg text-center w-96 z-10">
-          <div className="flex justify-center  items-center space-x-2">
+          <div className="flex justify-center items-center space-x-2">
             <Image src={Logo} alt="Logo" width={100} height={50} />
           </div>
           <h2 className="text-2xl font-semibold mb-4 text-black">
             {isConnected ? "Logged In" : "Login with Gnosis Wallet"}
           </h2>
           <p className="text-black mb-6">
-            {isConnected && isCorrectChain
+            {isConnected
               ? "Do you have Circles Avatar?"
-              : `Connect your crypto wallet on Gnosis Chain to continue.`}
+              : "Connect your crypto wallet on Gnosis Chain to continue."}
           </p>
 
           {isConnected ? (
-            isCorrectChain ? (
-              <div>
-                <p className="text-sm font-semibold text-gray-700">
-                  Connected as:
-                </p>
-
-                <p className="break-all text-gray-800">{`${address?.slice(
-                  0,
-                  4
-                )}...${address?.slice(-4)}`}</p>
-                <button
-                  className="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition"
-                  onClick={() => disconnect()}
-                >
-                  Disconnect
-                </button>
-              </div>
-            ) : (
-              <div>
-                <p className="text-red-500 text-sm mb-3">
-                  ❌ You are on the wrong network!
-                </p>
-                <button
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition w-full"
-                  onClick={handleSwitchChain}
-                >
-                  Switch to Gnosis Chain
-                </button>
-              </div>
-            )
+            <div>
+              <p className="text-sm font-semibold text-gray-700">
+                Connected as:
+              </p>
+              <p className="break-all text-gray-800">{`${circlesAddress?.slice(
+                0,
+                4
+              )}...${circlesAddress?.slice(-4)}`}</p>
+              <button
+                className="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md transition"
+                onClick={disconnectWallet}
+              >
+                Disconnect
+              </button>
+            </div>
           ) : (
             <button
-              onClick={() => {
-                setLoading(true);
-                connect({ connector: injected() });
-                setTimeout(() => setLoading(false), 1500);
-              }}
+              onClick={handleConnectWallet}
               className="bg-black hover:bg-gray-800 text-white px-4 py-2 rounded-md transition w-full flex justify-center"
-              disabled={loading}
+              disabled={isLoading}
             >
-              {loading ? "Connecting..." : "Connect Wallet"}
+              {isLoading ? "Connecting..." : "Connect Wallet"}
             </button>
           )}
         </div>
