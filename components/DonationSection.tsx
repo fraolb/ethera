@@ -1,6 +1,6 @@
 const DonationSection = () => {
   return (
-    <div className="bg-white shadow-md p-4 rounded-md">
+    <div className="bg-white p-4 shadow-md rounded-lg overflow-hidden w-full max-w-xs">
       <h3 className="font-bold mb-2">Donate</h3>
       <input
         type="number"
