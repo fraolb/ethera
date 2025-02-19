@@ -1,13 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useAccount } from "wagmi";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import CreatorProfile from "@/components/CreatorProfile";
 import Posts from "@/components/Posts";
 import Promote from "@/components/Promote";
+import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 
 const dummyPosts = [
   {
@@ -46,14 +46,27 @@ const dummyPosts = [
 
 const Dashboard = () => {
   const router = useRouter();
-  const { isConnected } = useAccount();
+
+  // Use the Circles SDK context
+  const { isConnected, isLoading } = useContext(CirclesSDKContext);
+  console.log("the isConnected in main page ", isConnected);
 
   // Redirect to auth page if user is not connected
   useEffect(() => {
-    if (!isConnected) {
+    console.log("the val in main page ", isLoading, isConnected);
+    if (!isLoading && !isConnected) {
       router.push("/auth");
     }
-  }, [isConnected, router]);
+  }, [isConnected, isLoading, router]);
+
+  // If the app is still loading, show a loading spinner
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+      </div>
+    ); // or a spinner component
+  }
 
   // If the user is not connected, don't render the dashboard
   if (!isConnected) {

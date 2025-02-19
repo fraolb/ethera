@@ -52,7 +52,8 @@ const LoginPage = () => {
       // Check if the user has a Circles avatar
       sdk?.getAvatar(circlesAddress).then((avatar) => {
         if (avatar) {
-          router.push("/dashboard"); // Redirect to dashboard if avatar exists
+          console.log("go to dashboard ", isConnected);
+          router.push("/"); // Redirect to dashboard if avatar exists
         } else {
           router.push("/onboarding"); // Redirect to onboarding if no avatar
         }
