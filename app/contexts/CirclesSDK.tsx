@@ -5,7 +5,22 @@ import { BrowserProviderContractRunner } from "@circles-sdk/adapter-ethers";
 import { Sdk } from "@circles-sdk/sdk";
 import { CirclesRpc, CirclesData } from "@circles-sdk/data";
 
-const CirclesSDKContext = createContext(null);
+// Define the context type
+interface CirclesSDKContextValue {
+  sdk: Sdk | null;
+  isConnected: boolean;
+  setIsConnected: (connected: boolean) => void;
+  adapter: BrowserProviderContractRunner | null;
+  circlesProvider: any; // Replace `any` with the appropriate type for the provider
+  circlesAddress: string | null;
+  initializeSdk: () => Promise<void>;
+  disconnectWallet: () => void;
+  circlesData: CirclesData | null;
+  isLoading: boolean; // Add isLoading state
+}
+
+// Create the context
+const CirclesSDKContext = createContext<CirclesSDKContextValue | null>(null);
 
 export const CirclesSDK = ({ children }: { children: React.ReactNode }) => {
   const [sdk, setSdk] = useState<Sdk | null>(null);
@@ -16,6 +31,8 @@ export const CirclesSDK = ({ children }: { children: React.ReactNode }) => {
   const [circlesProvider, setCirclesProvider] = useState<any>(null); // Replace `any` with the appropriate type
   const [circlesAddress, setCirclesAddress] = useState<string | null>(null);
   const [circlesData, setCirclesData] = useState<CirclesData | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true); // Add isLoading state
+
   const chainConfig = {
     circlesRpcUrl: "https://static.94.138.251.148.clients.your-server.de/rpc/",
     v1HubAddress: "0x29b9a7fbb8995b2423a71cc17cf9810798f6c543",
@@ -26,6 +43,30 @@ export const CirclesSDK = ({ children }: { children: React.ReactNode }) => {
       "https://static.94.138.251.148.clients.your-server.de/profiles/",
     baseGroupMintPolicy: "0x79Cbc9C7077dF161b92a745345A6Ade3fC626A60",
   };
+
+  // Load state from localStorage on initial render
+  useEffect(() => {
+    setIsLoading(true);
+    const savedIsConnected = localStorage.getItem("isConnected") === "true";
+    const savedCirclesAddress = localStorage.getItem("circlesAddress");
+
+    if (savedIsConnected && savedCirclesAddress) {
+      setIsConnected(savedIsConnected);
+      setCirclesAddress(savedCirclesAddress);
+    }
+
+    setIsLoading(false); // Mark loading as complete
+  }, []);
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("isConnected", isConnected.toString());
+    if (circlesAddress) {
+      localStorage.setItem("circlesAddress", circlesAddress);
+    } else {
+      localStorage.removeItem("circlesAddress");
+    }
+  }, [isConnected, circlesAddress]);
 
   const initializeSdk = useCallback(async () => {
     try {
@@ -60,10 +101,6 @@ export const CirclesSDK = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  useEffect(() => {
-    initializeSdk();
-  }, [initializeSdk]);
-
   const disconnectWallet = useCallback(() => {
     setIsConnected(false);
     setCirclesAddress(null);
@@ -82,6 +119,7 @@ export const CirclesSDK = ({ children }: { children: React.ReactNode }) => {
         initializeSdk,
         disconnectWallet,
         circlesData,
+        isLoading, // Pass isLoading to the context
       }}
     >
       {children}
