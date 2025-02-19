@@ -27,7 +27,7 @@ const PostCard = ({ post }: { post: Post }) => {
   const router = useRouter();
   return (
     <div
-      className="bg-white rounded-lg shadow-md overflow-hidden"
+      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-2xl hover:cursor-pointer"
       onClick={() => router.push(`/${post.id}`)}
     >
       <div className="relative">

@@ -75,18 +75,18 @@ const Dashboard = () => {
 
   return (
     <div className="flex w-full bg-gray-100">
-      <div className="w-1/6">
+      <div className="w-0 md:w-1/6">
         <Sidebar />
       </div>
 
       <div className="flex flex-col flex-1 w-3/4">
         <Header />
-        <div className="p-6 grid grid-cols-4 gap-4">
+        <div className="p-6 block md:grid md:grid-cols-4 gap-4">
           <div className="col-span-3">
             <Posts posts={dummyPosts} />
             <Posts posts={dummyPosts} />
           </div>
-          <div className="flex flex-col gap-4 ">
+          <div className="flex flex-col gap-4 mt-4 ">
             <Promote cardTitle="trending" contents={dummyPosts} />
             <Promote cardTitle="Most Viewed" contents={dummyPosts} />
           </div>

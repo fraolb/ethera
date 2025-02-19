@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { FaSearch, FaUserCircle, FaBars } from "react-icons/fa";
 import { useState } from "react";
 
 const Header = () => {
@@ -20,62 +20,80 @@ const Header = () => {
   };
 
   return (
-    <header className="flex justify-between items-center bg-white shadow-md p-4">
-      <div className="w-2/3 flex justify-center">
-        <div className="w-full relative">
-          <FaSearch className="absolute left-3 top-3 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search creators..."
-            className="w-full pl-10 pr-4 py-2 border rounded-md"
-          />
+    <header className="flex flex-col bg-white shadow-md">
+      {/* Top section of the header */}
+      <div className="flex justify-between items-center p-4">
+        {/* Logo for mobile */}
+        <div className="md:hidden">
+          <h2 className="text-xl font-bold">ETHera</h2>
         </div>
-      </div>
 
-      <div className="flex items-center gap-4 relative">
-        {/* User Icon with Dropdown */}
-        <div className="relative">
+        {/* Search bar */}
+        <div className="w-2/3 mx-2 md:mx-0 flex justify-center">
+          <div className="w-full relative">
+            <FaSearch className="absolute left-3 top-3 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search creators..."
+              className="w-full pl-10 pr-4 py-2 border rounded-md focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
+            />
+          </div>
+        </div>
+
+        {/* User actions */}
+        <div className="flex items-center gap-2 md:gap-4">
+          {/* User Icon */}
           <FaUserCircle
             className="text-gray-600 text-2xl cursor-pointer"
-            onClick={toggleDropdown}
+            onClick={() => router.push("/profile/i")}
           />
-          {/* Dropdown Menu */}
-          {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
-              <ul className="py-1">
-                <li
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handleDropdownItemClick("/profile")}
-                >
-                  Profile
-                </li>
-                <li
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handleDropdownItemClick("/faq")}
-                >
-                  FAQ
-                </li>
-                <li
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handleDropdownItemClick("/settings")}
-                >
-                  Settings
-                </li>
-                <li
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handleDropdownItemClick("/logout")}
-                >
-                  Logout
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
 
-        <button className="bg-orange-500 text-white px-4 py-2 rounded-md">
-          Become a creator
-        </button>
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <FaBars
+              className="text-gray-600 text-2xl cursor-pointer"
+              onClick={toggleDropdown}
+            />
+          </div>
+
+          {/* Become a creator button (hidden on mobile) */}
+          <button className="hidden md:flex bg-orange-500 text-white px-4 py-2 rounded-md">
+            Become a creator
+          </button>
+        </div>
       </div>
+
+      {/* Dropdown section (visible on mobile) */}
+      {isDropdownOpen && (
+        <div className="md:hidden bg-white border-t border-gray-200">
+          <ul className="py-2">
+            <li
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              onClick={() => handleDropdownItemClick("/profile")}
+            >
+              Profile
+            </li>
+            <li
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              onClick={() => handleDropdownItemClick("/faq")}
+            >
+              FAQ
+            </li>
+            <li
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              onClick={() => handleDropdownItemClick("/settings")}
+            >
+              Settings
+            </li>
+            <li
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              onClick={() => handleDropdownItemClick("/logout")}
+            >
+              Logout
+            </li>
+          </ul>
+        </div>
+      )}
     </header>
   );
 };

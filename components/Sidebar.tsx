@@ -26,7 +26,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-1/6 h-screen bg-white shadow-md p-5 flex flex-col fixed top-0 left-0">
+    <div className="w-1/6 h-screen bg-white shadow-md p-5 hidden md:flex flex-col fixed top-0 left-0">
       <h2 className="text-xl font-bold mb-6">ETHera</h2>
 
       <nav className="space-y-4">
@@ -42,7 +42,7 @@ const Sidebar = () => {
         <SidebarItem text="Alisa Flores" />
         <div className="flex justify-center">
           <button
-            className="mt-4 text-red-500 px-6 py-2 border border-red-500 rounded rounded-md"
+            className="mt-4 text-red-500 px-6 py-2 border border-red-500 rounded rounded-md hover:bg-red-500 hover:text-white"
             onClick={() => handleDisconnectWallet()}
           >
             Log out
