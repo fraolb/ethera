@@ -1,6 +1,30 @@
+"use client";
+
+import React, { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/navigation";
 import { FaHome, FaSearch, FaEnvelope, FaMoneyBillWave } from "react-icons/fa";
+import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 
 const Sidebar = () => {
+  const router = useRouter();
+  // Use the Circles SDK context
+  const {
+    sdk,
+    isConnected,
+    setIsConnected,
+    adapter,
+    circlesProvider,
+    circlesAddress,
+    initializeSdk,
+    disconnectWallet,
+    circlesData,
+  } = useContext(CirclesSDKContext);
+
+  const handleDisconnectWallet = async () => {
+    await disconnectWallet();
+    router.push("/auth");
+  };
+
   return (
     <div className="w-1/6 h-screen bg-white shadow-md p-5 flex flex-col fixed top-0 left-0">
       <h2 className="text-xl font-bold mb-6">ETHera</h2>
@@ -17,7 +41,10 @@ const Sidebar = () => {
         <SidebarItem text="Brooklyn Simmons" />
         <SidebarItem text="Alisa Flores" />
         <div className="flex justify-center">
-          <button className="mt-4 text-red-500 px-6 py-2 border border-red-500 rounded rounded-md">
+          <button
+            className="mt-4 text-red-500 px-6 py-2 border border-red-500 rounded rounded-md"
+            onClick={() => handleDisconnectWallet()}
+          >
             Log out
           </button>
         </div>
