@@ -3,6 +3,7 @@
 import { WagmiProvider, cookieToInitialState } from "wagmi";
 import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { CirclesSDK } from "@/app/contexts/CirclesSDK";
 
 import { config } from "@/lib/config";
 
@@ -27,7 +28,7 @@ export default function Providers({ children, cookie }: Props) {
             overlayBlur: "small",
           })}
         >
-          {children}
+          <CirclesSDK>{children}</CirclesSDK>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
