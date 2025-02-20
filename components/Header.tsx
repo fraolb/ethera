@@ -2,11 +2,44 @@
 
 import { useRouter } from "next/navigation";
 import { FaSearch, FaUserCircle, FaBars } from "react-icons/fa";
-import { useState } from "react";
+import { CiBitcoin } from "react-icons/ci";
+import { useState, useContext, useEffect } from "react";
+import CirclesSDKContext from "@/app/contexts/CirclesSDK";
+import { ethers } from "ethers";
 
 const Header = () => {
   const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [userBalance, setUserBalance] = useState("0");
+  const [avatarInfo, setAvatar] = useState(null);
+
+  // Use the Circles SDK context
+  const {
+    sdk,
+    isConnected,
+    setIsConnected,
+    circlesAddress,
+    initializeSdk,
+    circlesProvider,
+    disconnectWallet,
+  } = useContext(CirclesSDKContext);
+
+  const getCRCBalance = async () => {
+    try {
+      if (!sdk || !circlesAddress) return;
+
+      const avatar = await sdk.getAvatar(circlesAddress);
+      if (avatar) {
+        setAvatar(avatar);
+        const total = await avatar.getTotalBalance(circlesAddress);
+        setUserBalance(total);
+      } else {
+        setAvatar(null);
+      }
+    } catch (error) {
+      console.error("Error checking avatar:", error);
+    }
+  };
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {
@@ -18,6 +51,10 @@ const Header = () => {
     router.push(path);
     setIsDropdownOpen(false); // Close dropdown after navigation
   };
+
+  useEffect(() => {
+    getCRCBalance();
+  }, [circlesAddress, circlesProvider]);
 
   return (
     <header className="flex flex-col bg-white shadow-md">
@@ -42,9 +79,15 @@ const Header = () => {
 
         {/* User actions */}
         <div className="flex items-center gap-2 md:gap-4">
+          <div className="flex">
+            <CiBitcoin className="text-yellow-700 text-2xl " />
+            <div className="text-yellow-700">
+              {Number(userBalance).toFixed()} CRC
+            </div>
+          </div>
           {/* User Icon */}
           <FaUserCircle
-            className="text-gray-600 text-2xl cursor-pointer"
+            className="hidden md:flex text-gray-600 text-2xl cursor-pointer"
             onClick={() => router.push("/profile/i")}
           />
 
