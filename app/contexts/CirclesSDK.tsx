@@ -101,6 +101,10 @@ export const CirclesSDK = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
+  useEffect(() => {
+    initializeSdk();
+  }, [initializeSdk]);
+
   const disconnectWallet = useCallback(() => {
     setIsConnected(false);
     setCirclesAddress(null);
