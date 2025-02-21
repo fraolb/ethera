@@ -4,6 +4,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { FaHome, FaSearch, FaEnvelope, FaMoneyBillWave } from "react-icons/fa";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
+import Image from "next/image";
+import Logo from "@/public/etheraLogo.png";
 
 const Sidebar = () => {
   const router = useRouter();
@@ -27,7 +29,16 @@ const Sidebar = () => {
 
   return (
     <div className="w-1/6 h-screen bg-white shadow-md p-5 hidden md:flex flex-col fixed top-0 left-0">
-      <h2 className="text-xl font-bold mb-6">ETHera</h2>
+      <div className="flex justify-center mb-4">
+        <Image
+          src={Logo}
+          width={150}
+          height={150}
+          alt="Picture of the author"
+          onClick={() => router.push("/")}
+          className="cursor-pointer"
+        />
+      </div>
 
       <nav className="space-y-4">
         <SidebarItem icon={<FaHome />} route="/" text="Feed" badge={37} />

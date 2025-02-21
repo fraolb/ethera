@@ -6,6 +6,8 @@ import { CiBitcoin } from "react-icons/ci";
 import { useState, useContext, useEffect } from "react";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 import { ethers } from "ethers";
+import Image from "next/image";
+import Logo from "@/public/etheraLogo.png";
 
 const Header = () => {
   const router = useRouter();
@@ -29,6 +31,7 @@ const Header = () => {
       if (!sdk || !circlesAddress) return;
 
       const avatar = await sdk.getAvatar(circlesAddress);
+      console.log("avatar ", avatar);
       if (avatar) {
         setAvatar(avatar);
         const total = await avatar.getTotalBalance(circlesAddress);
@@ -62,7 +65,14 @@ const Header = () => {
       <div className="flex justify-between items-center p-4">
         {/* Logo for mobile */}
         <div className="md:hidden">
-          <h2 className="text-xl font-bold">ETHera</h2>
+          <Image
+            src={Logo}
+            width={100}
+            height={100}
+            alt="Picture of the author"
+            onClick={() => router.push("/")}
+            className="cursor-pointer"
+          />
         </div>
 
         {/* Search bar */}
@@ -87,7 +97,7 @@ const Header = () => {
           </div>
           {/* User Icon */}
           <FaUserCircle
-            className="hidden md:flex text-gray-600 text-2xl cursor-pointer"
+            className="hidden md:flex text-gray-600 text-2xl cursor-pointer hover:ring-2 hover:ring-yellow-700 hover:rounded-xl"
             onClick={() => router.push("/profile/i")}
           />
 
@@ -100,7 +110,10 @@ const Header = () => {
           </div>
 
           {/* Become a creator button (hidden on mobile) */}
-          <button className="hidden md:flex bg-orange-500 text-white px-4 py-2 rounded-md">
+          <button
+            onClick={() => router.push("/profile/creator")}
+            className="hidden md:flex bg-orange-500 text-white px-4 py-2 rounded-md hover:ring-2 hover:ring-orange-700 "
+          >
             Become a creator
           </button>
         </div>
