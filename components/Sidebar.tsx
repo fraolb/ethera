@@ -30,7 +30,7 @@ const Sidebar = () => {
       <h2 className="text-xl font-bold mb-6">ETHera</h2>
 
       <nav className="space-y-4">
-        <SidebarItem icon={<FaHome />} text="Feed" badge={37} />
+        <SidebarItem icon={<FaHome />} route="/" text="Feed" badge={37} />
         <SidebarItem icon={<FaSearch />} text="Explore" />
         <SidebarItem icon={<FaEnvelope />} text="Messages" />
         <SidebarItem icon={<FaMoneyBillWave />} text="Payment" />
@@ -57,22 +57,34 @@ const SidebarItem = ({
   icon,
   text,
   badge,
+  route,
 }: {
   icon?: JSX.Element;
   text: string;
   badge?: number;
-}) => (
-  <div className="flex items-center justify-between p-2 hover:bg-gray-200 rounded-md cursor-pointer">
-    <div className="flex items-center gap-3">
-      {icon && <span className="text-gray-600">{icon}</span>}
-      <span>{text}</span>
+  route?: string;
+}) => {
+  const router = useRouter();
+  return (
+    <div
+      className="flex items-center justify-between p-2 hover:bg-gray-200 rounded-md cursor-pointer"
+      onClick={() => {
+        if (route) {
+          router.push(route);
+        }
+      }}
+    >
+      <div className="flex items-center gap-3">
+        {icon && <span className="text-gray-600">{icon}</span>}
+        <span>{text}</span>
+      </div>
+      {badge && (
+        <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+          {badge}
+        </span>
+      )}
     </div>
-    {badge && (
-      <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-        {badge}
-      </span>
-    )}
-  </div>
-);
+  );
+};
 
 export default Sidebar;
