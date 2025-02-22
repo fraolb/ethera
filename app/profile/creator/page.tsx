@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
+import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 
 const CreatorPage = () => {
   const router = useRouter();
@@ -14,6 +15,9 @@ const CreatorPage = () => {
     other: "",
   });
   const [loading, setLoading] = useState(false);
+
+  // Use the Circles SDK context
+  const { circlesAddress } = useContext(CirclesSDKContext);
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,22 +34,51 @@ const CreatorPage = () => {
     setLoading(true);
 
     // Validate inputs
-    if (!tiers.standard || !tiers.premium || !tiers.other) {
+    if (!tiers.standard || !tiers.premium || !tiers.other || !name) {
       alert("Please fill in all fields.");
       setLoading(false);
       return;
     }
 
-    // Simulate API call or smart contract interaction
     try {
+      // Simulate API call or smart contract interaction
       console.log("Submitting tiers:", tiers);
-      // Add logic to interact with your smart contract here
+
+      // Create a new user
+      const userData = {
+        creator: name, // Use the name as the creator
+        walletAddress: circlesAddress, // Replace with the actual wallet address
+        isCreator: true,
+        contents: [], // Start with an empty content array
+      };
+
+      // Call the API route to create the user
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      // Check if the response is not OK
+      if (!response.ok) {
+        // Parse the error response from the API
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || "Failed to create user");
+      }
+
+      const newUser = await response.json();
+      console.log("User created successfully:", newUser);
 
       // Redirect to the creator dashboard or home page
       router.push("/creator-dashboard");
     } catch (error) {
-      console.error("Error submitting tiers:", error);
-      alert("An error occurred. Please try again.");
+      console.error("Error submitting tiers or creating user:", error);
+
+      // Display the error message in an alert
+
+      alert("Error Creating Profile: " + error);
     } finally {
       setLoading(false);
     }
