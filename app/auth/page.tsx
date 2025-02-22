@@ -3,9 +3,9 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { BsThreeDots, BsPeople, BsHeart, BsBookmark } from "react-icons/bs";
 import BgImage from "@/public/bgImage1.jpg";
 import Logo from "@/public/ETHERALogo.png";
+import { Ellipsis, Users, Heart, Bookmark } from "lucide-react";
 
 const PreLogin = () => {
   const router = useRouter();
@@ -30,15 +30,15 @@ const PreLogin = () => {
         {/* Center Buttons */}
         <div className="flex items-center space-x-2 text-black">
           <button className="flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm border">
-            <BsPeople className="text-black" />
+            <Users />
             FRIENDS
           </button>
           <button className="flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm border">
-            <BsHeart />
+            <Heart />
             LIKED
           </button>
           <button className="flex items-center gap-2 bg-white px-4 py-2 rounded-full text-sm border">
-            <BsBookmark />
+            <Bookmark />
             SAVED
           </button>
         </div>
@@ -46,7 +46,7 @@ const PreLogin = () => {
         {/* Right Side Buttons */}
         <div className="flex items-center gap-2">
           <button className="bg-black text-white px-4 py-2 rounded-full flex items-center">
-            <BsThreeDots />
+            <Ellipsis />
             <span className="ml-2">MENU</span>
           </button>
           <button

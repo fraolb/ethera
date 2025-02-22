@@ -2,14 +2,13 @@
 
 import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
-import { FaHome, FaSearch, FaEnvelope, FaMoneyBillWave } from "react-icons/fa";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 import Image from "next/image";
 import Logo from "@/public/etheraLogo.png";
+import { Home, Search, Mail, Banknote } from "lucide-react";
 
 const Sidebar = () => {
   const router = useRouter();
-  // Use the Circles SDK context
   const { disconnectWallet } = useContext(CirclesSDKContext);
 
   const handleDisconnectWallet = async () => {
@@ -19,22 +18,22 @@ const Sidebar = () => {
 
   return (
     <div className="w-1/6 h-screen bg-white shadow-md p-5 hidden md:flex flex-col fixed top-0 left-0">
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-6">
         <Image
           src={Logo}
           width={150}
           height={150}
-          alt="Picture of the author"
+          alt="Ethera Logo"
           onClick={() => router.push("/")}
           className="cursor-pointer"
         />
       </div>
 
-      <nav className="space-y-4">
-        <SidebarItem icon={<FaHome />} route="/" text="Feed" badge={37} />
-        <SidebarItem icon={<FaSearch />} text="Explore" />
-        <SidebarItem icon={<FaEnvelope />} text="Messages" />
-        <SidebarItem icon={<FaMoneyBillWave />} text="Payment" />
+      <nav className="space-y-2">
+        <SidebarItem icon={Home} route="/" text="Feed" badge={37} />
+        <SidebarItem icon={Search} text="Explore" />
+        <SidebarItem icon={Mail} text="Messages" />
+        <SidebarItem icon={Banknote} text="Payment" />
       </nav>
 
       <div className="mt-auto">
@@ -43,8 +42,8 @@ const Sidebar = () => {
         <SidebarItem text="Alisa Flores" />
         <div className="flex justify-center">
           <button
-            className="mt-4 text-red-500 px-6 py-2 border border-red-500 rounded rounded-md hover:bg-red-500 hover:text-white"
-            onClick={() => handleDisconnectWallet()}
+            className="mt-4 text-red-500 px-6 py-2 border border-red-500 rounded-md hover:bg-red-500 hover:text-white"
+            onClick={handleDisconnectWallet}
           >
             Log out
           </button>
@@ -55,17 +54,18 @@ const Sidebar = () => {
 };
 
 const SidebarItem = ({
-  icon,
+  icon: Icon,
   text,
   badge,
   route,
 }: {
-  icon?: JSX.Element;
+  icon?: React.ElementType;
   text: string;
   badge?: number;
   route?: string;
 }) => {
   const router = useRouter();
+
   return (
     <div
       className="flex items-center justify-between p-2 hover:bg-gray-200 rounded-md cursor-pointer"
@@ -76,10 +76,10 @@ const SidebarItem = ({
       }}
     >
       <div className="flex items-center gap-3">
-        {icon && <span className="text-gray-600">{icon}</span>}
+        {Icon && <Icon size={20} className="text-gray-600" />}
         <span>{text}</span>
       </div>
-      {badge && (
+      {badge !== undefined && (
         <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">
           {badge}
         </span>
