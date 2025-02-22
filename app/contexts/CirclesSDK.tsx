@@ -80,7 +80,9 @@ export const CirclesSDK = ({ children }: { children: React.ReactNode }) => {
       const address = await newAdapter.address;
 
       setCirclesProvider(provider);
-      setCirclesAddress(address);
+      if (address !== undefined) {
+        setCirclesAddress(address);
+      }
 
       const sdkInstance = new Sdk(newAdapter, chainConfig);
 
