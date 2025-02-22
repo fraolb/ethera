@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { FaHome, FaSearch, FaEnvelope, FaMoneyBillWave } from "react-icons/fa";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
@@ -10,17 +10,7 @@ import Logo from "@/public/etheraLogo.png";
 const Sidebar = () => {
   const router = useRouter();
   // Use the Circles SDK context
-  const {
-    sdk,
-    isConnected,
-    setIsConnected,
-    adapter,
-    circlesProvider,
-    circlesAddress,
-    initializeSdk,
-    disconnectWallet,
-    circlesData,
-  } = useContext(CirclesSDKContext);
+  const { disconnectWallet } = useContext(CirclesSDKContext);
 
   const handleDisconnectWallet = async () => {
     await disconnectWallet();

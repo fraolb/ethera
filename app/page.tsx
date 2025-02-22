@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useContext } from "react";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import CreatorProfile from "@/components/CreatorProfile";
 import Posts from "@/components/Posts";
 import Promote from "@/components/Promote";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";

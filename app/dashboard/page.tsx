@@ -1,12 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import CreatorProfile from "@/components/CreatorProfile";
 import Posts from "@/components/Posts";
-import DonationSection from "@/components/DonationSection";
-import SubscriptionTiers from "@/components/SubscriptionTiers";
 import Promote from "@/components/Promote";
 
 const dummyPosts = [
@@ -45,7 +41,6 @@ const dummyPosts = [
 ];
 
 const Dashboard = () => {
-  const router = useRouter();
   return (
     <div className="flex w-full bg-gray-100">
       <div className="w-1/6">

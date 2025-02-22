@@ -2,8 +2,6 @@
 
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
-import CreatorProfile from "@/components/CreatorProfile";
-import Posts from "@/components/Posts";
 import DonationSection from "@/components/DonationSection";
 import SubscriptionTiers from "@/components/SubscriptionTiers";
 

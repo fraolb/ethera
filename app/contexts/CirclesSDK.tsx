@@ -13,14 +13,16 @@ interface CirclesSDKContextValue {
   adapter: BrowserProviderContractRunner | null;
   circlesProvider: any; // Replace `any` with the appropriate type for the provider
   circlesAddress: string | null;
-  initializeSdk: () => Promise<void>;
+  initializeSdk: () => Promise<Sdk | null>;
   disconnectWallet: () => void;
   circlesData: CirclesData | null;
   isLoading: boolean; // Add isLoading state
 }
 
 // Create the context
-const CirclesSDKContext = createContext<CirclesSDKContextValue | null>(null);
+const CirclesSDKContext = createContext<CirclesSDKContextValue>(
+  {} as CirclesSDKContextValue
+);
 
 export const CirclesSDK = ({ children }: { children: React.ReactNode }) => {
   const [sdk, setSdk] = useState<Sdk | null>(null);

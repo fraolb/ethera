@@ -5,7 +5,6 @@ import { FaSearch, FaUserCircle, FaBars } from "react-icons/fa";
 import { CiBitcoin } from "react-icons/ci";
 import { useState, useContext, useEffect } from "react";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
-import { ethers } from "ethers";
 import Image from "next/image";
 import Logo from "@/public/etheraLogo.png";
 
@@ -16,15 +15,8 @@ const Header = () => {
   const [avatarInfo, setAvatar] = useState(null);
 
   // Use the Circles SDK context
-  const {
-    sdk,
-    isConnected,
-    setIsConnected,
-    circlesAddress,
-    initializeSdk,
-    circlesProvider,
-    disconnectWallet,
-  } = useContext(CirclesSDKContext);
+  const { sdk, circlesAddress, circlesProvider } =
+    useContext(CirclesSDKContext);
 
   const getCRCBalance = async () => {
     try {
@@ -58,6 +50,7 @@ const Header = () => {
   useEffect(() => {
     getCRCBalance();
   }, [circlesAddress, circlesProvider]);
+  console.log(avatarInfo);
 
   return (
     <header className="flex flex-col bg-white shadow-md">
