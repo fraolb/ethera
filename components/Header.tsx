@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, useContext, useEffect } from "react";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 import Image from "next/image";
-import Logo from "@/public/etheraLogo.png";
+import Logo from "@/public/etheraIcon.png";
 import { Menu, CircleUserRound, Bitcoin, Search } from "lucide-react";
 import { Avatar } from "@circles-sdk/sdk";
 

@@ -4,7 +4,7 @@ import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import BgImage from "@/public/bgImage1.jpg";
-import Logo from "@/public/ETHERALogo.png";
+import Logo from "@/public/etheraIcon.png";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 
 const LoginPage = () => {

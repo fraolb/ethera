@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 import Image from "next/image";
-import Logo from "@/public/etheraLogo.png";
+import Logo from "@/public/etheraIcon.png";
 import { Home, Search, Mail, Banknote } from "lucide-react";
 
 const Sidebar = () => {
