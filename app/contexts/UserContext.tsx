@@ -15,6 +15,7 @@ interface UserContextType {
   updateUserData: (updatedUser: IUser) => Promise<void>;
   isCreator: boolean;
   contents: IContent[] | null;
+  allContents: IContent[] | null;
 }
 
 // Create the context with a default value
@@ -29,6 +30,7 @@ interface UserProviderProps {
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<IUser | null>(null);
   const [contents, setContents] = useState<IContent[] | null>(null);
+  const [allContents, setAllContents] = useState<IContent[] | null>(null);
   const [isCreator, setIsCreator] = useState(true);
 
   // Function to fetch user data from MongoDB
@@ -48,14 +50,18 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       const contentResponse = await fetch(
         `/api/users/content/${walletAddress}`
       );
-      if (!contentResponse.ok) {
-        console.error("Failed to fetch content:", contentResponse);
-        return;
+      if (contentResponse.ok) {
+        const contentData: IContent[] = await contentResponse.json();
+        console.log("Content data found:", contentData);
+        setContents(contentData);
       }
 
-      const contentData: IContent[] = await contentResponse.json();
-      console.log("Content data found:", contentData);
-      setContents(contentData);
+      const allContentResponse = await fetch(`/api/users/content`);
+      if (allContentResponse.ok) {
+        const allContentData: IContent[] = await allContentResponse.json();
+        console.log("All Content data found:", allContentData);
+        setAllContents(allContentData);
+      }
     } catch (error) {
       setIsCreator(false);
       console.error("Failed to fetch user data:", error);
@@ -81,7 +87,14 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
   return (
     <UserContext.Provider
-      value={{ user, fetchUserData, updateUserData, isCreator, contents }}
+      value={{
+        user,
+        fetchUserData,
+        updateUserData,
+        isCreator,
+        contents,
+        allContents,
+      }}
     >
       {children}
     </UserContext.Provider>
