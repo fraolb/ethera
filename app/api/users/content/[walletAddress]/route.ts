@@ -7,10 +7,13 @@ interface Params {
   walletAddress: string;
 }
 
-export async function GET(request: Request, { params }: { params: Params }) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<Params> }
+) {
   await dbConnect();
 
-  const { walletAddress } = params;
+  const { walletAddress } = await params;
 
   try {
     // Fetch all content created by the user with the given walletAddress

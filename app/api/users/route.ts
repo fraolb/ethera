@@ -22,7 +22,8 @@ export async function POST(request: Request) {
   await dbConnect();
 
   try {
-    const { creator, walletAddress, isCreator } = await request.json();
+    const { creator, description, walletAddress, profileImg, isCreator } =
+      await request.json();
 
     // Check if the user already exists
     const existingUser = await User.findOne({ walletAddress });
@@ -34,11 +35,18 @@ export async function POST(request: Request) {
     }
 
     // Create a new user
-    const newUser = new User({ creator, walletAddress, isCreator });
+    const newUser = new User({
+      creator,
+      description,
+      walletAddress,
+      profileImg,
+      isCreator,
+    });
     await newUser.save();
 
     return NextResponse.json(newUser, { status: 201 });
   } catch (error) {
+    console.log("the error in api is ", error);
     return NextResponse.json(
       { message: "Error creating user", error },
       { status: 500 }
