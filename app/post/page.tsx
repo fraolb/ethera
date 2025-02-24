@@ -5,14 +5,22 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 
+interface notificationInterfact {
+  message: string;
+  type: string;
+}
+
 const PostPage = () => {
   const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [contentType, setContentType] = useState<"video" | "image" | "blog">(
     "video"
   );
   const [tier, setTier] = useState<"standard" | "premium" | "vip">("standard");
   const [content, setContent] = useState<File | string | null>("");
   const [loading, setLoading] = useState(false);
+  const [notification, setNotification] =
+    useState<notificationInterfact | null>();
 
   // Use the Circles SDK context
   const { circlesAddress } = useContext(CirclesSDKContext);
@@ -23,7 +31,14 @@ const PostPage = () => {
     setLoading(true);
 
     // Validate inputs
-    if (!title || !contentType || !tier || !content || !circlesAddress) {
+    if (
+      !title ||
+      !description ||
+      !contentType ||
+      !tier ||
+      !content ||
+      !circlesAddress
+    ) {
       alert("Please fill in all fields.");
       setLoading(false);
       return;
@@ -65,6 +80,7 @@ const PostPage = () => {
       const postData = {
         walletAddress: circlesAddress,
         title,
+        description,
         contentType,
         tier,
         contentLink,
@@ -88,21 +104,42 @@ const PostPage = () => {
 
       // Reset the form
       setTitle("");
+      setDescription("");
       setContentType("video");
       setTier("standard");
       setContent(null);
 
-      alert("Content submitted successfully!");
+      setNotification({
+        message: "Content submitted successfully!",
+        type: "success",
+      });
+
+      // Redirect to the creator dashboard or home page
+      //setTimeout(() => router.push("/"), 3000);
     } catch (error) {
       console.error("Error submitting content:", error);
-      alert(error);
+
+      setNotification({
+        message: "Error happened while submitting content!",
+        type: "error",
+      });
     } finally {
       setLoading(false);
+      setTimeout(() => setNotification(null), 3000);
     }
   };
 
   return (
     <div className="flex w-full bg-gray-100">
+      {notification && (
+        <div
+          className={`fixed top-0 left-1/2 transform -translate-x-1/2 mt-12 p-2 px-4 w-3/4 rounded shadow-lg z-10 ${
+            notification.type === "success" ? "bg-green-500" : "bg-red-500"
+          } text-white`}
+        >
+          {notification.message}
+        </div>
+      )}
       <div className="w-1/6">
         <Sidebar />
       </div>
@@ -132,6 +169,24 @@ const PostPage = () => {
                     onChange={(e) => setTitle(e.target.value)}
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                     placeholder="Enter title"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="descripton"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    id="descripton"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                    placeholder="Enter Description"
                     required
                   />
                 </div>
@@ -225,7 +280,33 @@ const PostPage = () => {
                     disabled={loading}
                     className="w-full bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                   >
-                    {loading ? "Submitting..." : "Submit"}
+                    {loading ? (
+                      <div className="flex items-center justify-center">
+                        <svg
+                          className="animate-spin h-5 w-5 mr-3 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        Submitting...
+                      </div>
+                    ) : (
+                      "Submit"
+                    )}
                   </button>
                 </div>
               </div>
