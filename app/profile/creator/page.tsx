@@ -19,6 +19,8 @@ const CreatorPage = () => {
     premium: "",
     other: "",
   });
+  const [description, setDescription] = useState("");
+  const [profile, setProfile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [notification, setNotification] =
     useState<notificationInterfact | null>();
@@ -51,10 +53,38 @@ const CreatorPage = () => {
       // Simulate API call or smart contract interaction
       console.log("Submitting tiers:", tiers);
 
+      let profileImg = "";
+      if (profile !== null) {
+        const file = profile as File;
+
+        // Create a FormData object to upload the file
+        const uploadData = new FormData();
+        uploadData.append("file", file);
+
+        // Upload the file to Cloudinary
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: uploadData,
+        });
+
+        // Read the response body only once
+        const data = await res.json();
+
+        // Check if the upload was successful
+        if (!res.ok) {
+          console.log("the res is ", res);
+          throw new Error("Failed to upload file to Cloudinary");
+        }
+
+        profileImg = await `${data.contentUrl}`; // Get the secure URL of the uploaded file
+      }
+
       // Create a new user
       const userData = {
         creator: name, // Use the name as the creator
+        description: description,
         walletAddress: circlesAddress, // Replace with the actual wallet address
+        profileImg,
         isCreator: true,
       };
 
@@ -144,6 +174,46 @@ const CreatorPage = () => {
                         onChange={(e) => setName(e.target.value)}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                         placeholder="Enter your Profile name"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="descripton"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Post Description
+                      </label>
+                      <input
+                        type="text"
+                        id="descripton"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                        placeholder="Enter Description"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="content"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Profile Image
+                      </label>
+
+                      <input
+                        type="file"
+                        id="content"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            setProfile(e.target.files[0]);
+                          }
+                        }}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                        accept="image/*"
                         required
                       />
                     </div>
