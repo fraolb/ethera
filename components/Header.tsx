@@ -7,6 +7,7 @@ import Image from "next/image";
 import Logo from "@/public/etheraIcon.png";
 import { Menu, CircleUserRound, Bitcoin, Search } from "lucide-react";
 import { Avatar } from "@circles-sdk/sdk";
+import { useUser } from "@/app/contexts/UserContext";
 
 const Header = () => {
   const router = useRouter();
@@ -18,6 +19,8 @@ const Header = () => {
   // Use the Circles SDK context
   const { sdk, circlesAddress, circlesProvider } =
     useContext(CirclesSDKContext);
+
+  const { user, fetchUserData, updateUserData, isCreator } = useUser();
 
   const getCRCBalance = async () => {
     try {
@@ -48,7 +51,7 @@ const Header = () => {
     setIsDropdownOpen(false); // Close dropdown after navigation
   };
 
-  const isCreator = async (address: string): Promise<boolean> => {
+  const isCreatora = async (address: string): Promise<boolean> => {
     try {
       // Fetch user data from the [walletAddress] route
       const response = await fetch(`/api/users/${address}`);
@@ -74,7 +77,8 @@ const Header = () => {
   useEffect(() => {
     getCRCBalance();
     if (circlesAddress) {
-      isCreator(circlesAddress);
+      fetchUserData(circlesAddress);
+      // isCreator(circlesAddress);
     }
   }, [circlesAddress, circlesProvider]);
   console.log(avatarInfo);
@@ -131,7 +135,7 @@ const Header = () => {
           </div>
 
           {/* Become a creator button (hidden on mobile) */}
-          {!isUserCreator && (
+          {!isCreator && (
             <button
               onClick={() => router.push("/profile/creator")}
               className="hidden md:flex bg-orange-500 text-white px-4 py-2 rounded-md hover:ring-2 hover:ring-orange-700 "

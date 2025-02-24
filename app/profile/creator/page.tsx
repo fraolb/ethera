@@ -6,6 +6,11 @@ import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 
+interface notificationInterfact {
+  message: string;
+  type: string;
+}
+
 const CreatorPage = () => {
   const router = useRouter();
   const [name, setName] = useState("");
@@ -15,6 +20,8 @@ const CreatorPage = () => {
     other: "",
   });
   const [loading, setLoading] = useState(false);
+  const [notification, setNotification] =
+    useState<notificationInterfact | null>();
 
   // Use the Circles SDK context
   const { circlesAddress } = useContext(CirclesSDKContext);
@@ -49,7 +56,6 @@ const CreatorPage = () => {
         creator: name, // Use the name as the creator
         walletAddress: circlesAddress, // Replace with the actual wallet address
         isCreator: true,
-        contents: [], // Start with an empty content array
       };
 
       // Call the API route to create the user
@@ -71,21 +77,39 @@ const CreatorPage = () => {
       const newUser = await response.json();
       console.log("User created successfully:", newUser);
 
+      setNotification({
+        message: "User created successfully!",
+        type: "success",
+      });
+
       // Redirect to the creator dashboard or home page
-      router.push("/creator-dashboard");
+      setTimeout(() => router.push("/"), 3000);
     } catch (error) {
       console.error("Error submitting tiers or creating user:", error);
 
       // Display the error message in an alert
 
-      alert("Error Creating Profile: " + error);
+      setNotification({
+        message: "error happened while creating user!",
+        type: "error",
+      });
     } finally {
       setLoading(false);
+      setTimeout(() => setNotification(null), 3000);
     }
   };
 
   return (
     <div className="flex w-full ">
+      {notification && (
+        <div
+          className={`fixed top-0 left-1/2 transform -translate-x-1/2 mt-12 p-2 px-4 w-3/4 rounded shadow-lg z-10 ${
+            notification.type === "success" ? "bg-green-500" : "bg-red-500"
+          } text-white`}
+        >
+          {notification.message}
+        </div>
+      )}
       <div className="w-1/6">
         <Sidebar />
       </div>
@@ -187,7 +211,33 @@ const CreatorPage = () => {
                         disabled={loading}
                         className="w-full bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
                       >
-                        {loading ? "Submitting..." : "Submit"}
+                        {loading ? (
+                          <div className="flex items-center justify-center">
+                            <svg
+                              className="animate-spin h-5 w-5 mr-3 text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                            Submitting...
+                          </div>
+                        ) : (
+                          "Submit"
+                        )}
                       </button>
                     </div>
                   </div>
