@@ -22,8 +22,7 @@ export async function POST(request: Request) {
   await dbConnect();
 
   try {
-    const { creator, walletAddress, isCreator, contents } =
-      await request.json();
+    const { creator, walletAddress, isCreator } = await request.json();
 
     // Check if the user already exists
     const existingUser = await User.findOne({ walletAddress });
@@ -35,7 +34,7 @@ export async function POST(request: Request) {
     }
 
     // Create a new user
-    const newUser = new User({ creator, walletAddress, isCreator, contents });
+    const newUser = new User({ creator, walletAddress, isCreator });
     await newUser.save();
 
     return NextResponse.json(newUser, { status: 201 });
