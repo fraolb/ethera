@@ -8,6 +8,7 @@ import Posts from "@/components/Posts";
 import Promote from "@/components/Promote";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 import { useUser } from "@/app/contexts/UserContext";
+import CategoryCard from "@/components/CategoryCard";
 
 const dummyPosts = [
   {
@@ -82,7 +83,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex w-full bg-gray-100">
+    <div className="flex w-full min-h-screen bg-gray-100">
       <div className="w-0 md:w-1/6">
         <Sidebar />
       </div>
@@ -92,6 +93,7 @@ const Dashboard = () => {
         <div className="p-6 block md:grid md:grid-cols-4 gap-4">
           <div className="col-span-3">
             {allContents && <Posts posts={allContents} />}
+            <CategoryCard />
           </div>
           <div className="flex flex-col gap-4 mt-4 ">
             <Promote cardTitle="trending" contents={dummyPosts} />

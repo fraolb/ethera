@@ -46,7 +46,7 @@ const Dashboard = () => {
   const { user, fetchUserData, updateUserData, isCreator, contents } =
     useUser();
   return (
-    <div className="flex w-full bg-gray-100">
+    <div className="flex w-full min-h-screen bg-gray-100">
       <div className="w-0 md:w-1/6">
         <Sidebar />
       </div>
