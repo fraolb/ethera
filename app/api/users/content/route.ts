@@ -43,7 +43,8 @@ export async function POST(request: Request) {
 
     // Create a new content
     const newContent = new Content({
-      createdBy: walletAddress,
+      createdBy: user,
+      walletAddress,
       title,
       descripton,
       contentType,

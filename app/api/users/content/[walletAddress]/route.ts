@@ -17,7 +17,7 @@ export async function GET(
 
   try {
     // Fetch all content created by the user with the given walletAddress
-    const content = await Content.find({ createdBy: walletAddress });
+    const content = await Content.find({ walletAddress });
 
     // If no content is found, return a 404 error
     if (content.length === 0) {
