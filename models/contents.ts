@@ -1,7 +1,10 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Types } from "mongoose";
+import { IUser } from "./creator";
 
 export interface IContent extends Document {
-  createdBy: string;
+  _id: string;
+  createdBy: IUser;
+  walletAddress: string;
   title: string;
   description: string; // Fix the typo here
   contentType: "blog" | "video" | "image";
@@ -14,7 +17,24 @@ export interface IContent extends Document {
 
 const ContentSchema: Schema = new Schema(
   {
-    createdBy: { type: String, required: true },
+    createdBy: {
+      creator: {
+        type: String,
+      },
+      description: {
+        type: String,
+      },
+      walletAddress: {
+        type: String,
+      },
+      profileImg: {
+        type: String,
+      },
+      isCreator: {
+        type: String,
+      },
+    },
+    walletAddress: { type: String, required: true },
     title: { type: String, required: true },
     descrption: { type: String, default: "" },
     contentType: {
