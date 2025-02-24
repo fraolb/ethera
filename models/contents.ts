@@ -19,7 +19,7 @@ const ContentSchema: Schema = new Schema(
     descrption: { type: String, default: "" },
     contentType: {
       type: String,
-      enum: ["blog", "vid", "image"],
+      enum: ["blog", "video", "image"],
       required: true,
     },
     tier: { type: String, required: true },
