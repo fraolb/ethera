@@ -1,7 +1,7 @@
 const DonationSection = () => {
   return (
     <div className="bg-white p-4 shadow-md rounded-lg overflow-hidden w-full max-w-xs">
-      <h3 className="font-bold mb-2">Donate</h3>
+      <h3 className="font-bold mb-2">Tip Creator</h3>
       <input
         type="number"
         className="w-full border p-2 mb-2"
