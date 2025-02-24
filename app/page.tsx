@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Posts from "@/components/Posts";
 import Promote from "@/components/Promote";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
+import { useUser } from "@/app/contexts/UserContext";
 
 const dummyPosts = [
   {
@@ -49,6 +50,14 @@ const Dashboard = () => {
   // Use the Circles SDK context
   const { isConnected, isLoading } = useContext(CirclesSDKContext);
   console.log("the isConnected in main page ", isConnected);
+  const {
+    user,
+    fetchUserData,
+    updateUserData,
+    isCreator,
+    contents,
+    allContents,
+  } = useUser();
 
   // Redirect to auth page if user is not connected
   useEffect(() => {
@@ -82,8 +91,7 @@ const Dashboard = () => {
         <Header />
         <div className="p-6 block md:grid md:grid-cols-4 gap-4">
           <div className="col-span-3">
-            <Posts posts={dummyPosts} />
-            <Posts posts={dummyPosts} />
+            {allContents && <Posts posts={allContents} />}
           </div>
           <div className="flex flex-col gap-4 mt-4 ">
             <Promote cardTitle="trending" contents={dummyPosts} />

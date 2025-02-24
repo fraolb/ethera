@@ -149,12 +149,11 @@ const PostPage = () => {
       <div className="flex flex-col flex-1 w-3/4">
         <Header />
         <div className="p-6 block md:grid md:grid-cols-4 gap-4">
-          <div className="col-span-3 flex flex-col items-center  min-h-screen bg-gray-100 p-4 pt-0">
-            <h1 className="text-3xl font-bold mb-8 ">Create New Content</h1>
-            <form
-              onSubmit={handleSubmit}
-              className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md"
-            >
+          <div className="col-span-4 flex flex-col items-center  min-h-screen bg-white rounded-lg shadow-md p-4 pt-0">
+            <h1 className="text-3xl font-bold mt-8 mb-0 ">
+              Create New Content
+            </h1>
+            <form onSubmit={handleSubmit} className="w-full max-w-lg  p-8 ">
               <div className="space-y-6">
                 {/* Title */}
                 <div>

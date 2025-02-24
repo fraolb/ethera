@@ -29,9 +29,9 @@ const PostCard = ({ post }: { post: IContent }) => {
     switch (post.contentType) {
       case "blog":
         return (
-          <div className="p-4 bg-gray-100 rounded-lg">
-            <h3 className="text-lg font-semibold">{post.title}</h3>
-            <p className="text-gray-600 text-sm truncate">
+          <div className="p-4 h-40 bg-gray-100 rounded-lg">
+            <h3 className="text-lg pt-6 font-semibold">{post.title}</h3>
+            <p className="text-gray-600  text-sm truncate">
               Read the full blog post:{" "}
               <a
                 href={post.contentLink}
