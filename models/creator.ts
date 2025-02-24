@@ -23,7 +23,7 @@ const ContentSchema: Schema = new Schema({
   contentType: { type: String, enum: ["blog", "vid", "image"], required: true },
   tier: { type: String, required: true },
   likes: { type: Number, default: 0 },
-  contentLink: { type: String },
+  contentLink: { type: String, required: true },
 });
 
 // Define the schema for the main document

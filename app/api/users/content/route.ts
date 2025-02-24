@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   await dbConnect();
 
   try {
-    const { walletAddress, title, contentType, tier, likes, contentLink } =
+    const { walletAddress, title, contentType, tier, contentLink } =
       await request.json();
 
     // Find the user
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     }
 
     // Add the new content to the user's contents array
-    user.contents.push({ title, contentType, tier, likes, contentLink });
+    user.contents.push({ title, contentType, tier, contentLink });
     await user.save();
 
     return NextResponse.json(user);
