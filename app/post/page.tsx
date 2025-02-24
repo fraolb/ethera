@@ -64,10 +64,10 @@ const PostPage = () => {
 
         // Read the response body only once
         const data = await res.json();
+        console.log("the res data is ", data);
 
         // Check if the upload was successful
         if (!res.ok) {
-          console.log("the res is ", res);
           throw new Error("Failed to upload file to Cloudinary");
         }
 
@@ -85,6 +85,7 @@ const PostPage = () => {
         tier,
         contentLink,
       };
+      console.log("the postData is ", postData);
 
       // Submit the form data to your API
       const response = await fetch("/api/users/content", {
@@ -96,6 +97,7 @@ const PostPage = () => {
       });
 
       if (!response.ok) {
+        console.log("the res is ", response);
         throw new Error("Failed to submit content");
       }
 
@@ -178,7 +180,7 @@ const PostPage = () => {
                     htmlFor="descripton"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Title
+                    Post Description
                   </label>
                   <input
                     type="text"
@@ -233,9 +235,9 @@ const PostPage = () => {
                     className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                     required
                   >
-                    <option value="free">Free</option>
                     <option value="standard">Standard</option>
                     <option value="premium">Premium</option>
+                    <option value="vip">VIP</option>
                   </select>
                 </div>
 

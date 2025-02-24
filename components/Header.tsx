@@ -113,18 +113,29 @@ const Header = () => {
 
         {/* User actions */}
         <div className="flex items-center gap-2 md:gap-4 ">
-          <div className="flex">
+          <div className="hidden md:flex">
             <Bitcoin className="text-yellow-700 text-2xl " />
             <div className="text-yellow-700">
               {Number(userBalance).toFixed()} CRC
             </div>
           </div>
           {/* User Icon */}
-          <CircleUserRound
-            size={30}
-            className="hidden md:flex text-orange-600 text-2xl md:text-4xl cursor-pointer hover:ring-2 hover:ring-yellow-700 hover:rounded-3xl"
-            onClick={() => router.push("/profile/i")}
-          />
+          {isCreator && user?.profileImg ? (
+            <Image
+              src={user.profileImg}
+              alt="Profile"
+              width={20}
+              height={20}
+              className="w-12 h-12 hidden md:flex rounded-full cursor-pointer hover:ring-2 hover:ring-yellow-700 hover:rounded-full"
+              onClick={() => router.push("/profile/i")}
+            />
+          ) : (
+            <CircleUserRound
+              size={30}
+              className="hidden md:flex text-orange-600 text-2xl md:text-4xl cursor-pointer hover:ring-2 hover:ring-yellow-700 hover:rounded-3xl"
+              onClick={() => router.push("/profile/i")}
+            />
+          )}
 
           {/* Mobile menu button */}
           <div className="md:hidden">
@@ -150,6 +161,12 @@ const Header = () => {
       {isDropdownOpen && (
         <div className="md:hidden bg-white border-t border-gray-200">
           <ul className="py-2">
+            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex gap-4">
+              <Bitcoin className="text-yellow-700 text-2xl " />
+              <div className="text-yellow-700">
+                {Number(userBalance).toFixed()} CRC
+              </div>
+            </li>
             <li
               className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
               onClick={() => handleDropdownItemClick("/profile")}

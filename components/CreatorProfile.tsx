@@ -1,17 +1,25 @@
-const CreatorProfile = () => {
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { IUser } from "@/models/creator";
+
+const CreatorProfile = ({ user }: { user: IUser }) => {
+  const router = useRouter();
   return (
     <div className="bg-white shadow-md p-6 rounded-md mb-4">
       <div className="flex items-center gap-4">
-        <img
-          src="https://images.unsplash.com/photo-1463453091185-61582044d556?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="Profile"
-          className="w-16 h-16 rounded-full"
-        />
+        {user.profileImg != "" && (
+          <Image
+            src={user.profileImg}
+            alt="Profile"
+            width={100}
+            height={100}
+            className="w-16 h-16 rounded-full"
+          />
+        )}
+
         <div>
-          <h2 className="text-xl font-bold">Johnathan Clein</h2>
-          <p className="text-gray-500">
-            Commercial Photographer | California, USA
-          </p>
+          <h2 className="text-xl font-bold">{user.creator}</h2>
+          <p className="text-gray-500">{user.description}</p>
         </div>
       </div>
 
@@ -25,6 +33,16 @@ const CreatorProfile = () => {
         <p>
           <strong>1593</strong> Likes
         </p>
+      </div>
+      <div className="flex mt-8 gap-8">
+        <h3 className="font-bold mb-2 pt-2">Post a new content</h3>
+
+        <button
+          className="bg-orange-500 text-white px-4  rounded-md"
+          onClick={() => router.push("/post")}
+        >
+          Post
+        </button>
       </div>
     </div>
   );
