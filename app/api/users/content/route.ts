@@ -3,7 +3,7 @@ import User from "@/models/creator";
 import Content from "@/models/contents";
 import dbConnect from "@/lib/mongodb";
 
-export async function GET(request: Request) {
+export async function GET() {
   await dbConnect();
 
   try {

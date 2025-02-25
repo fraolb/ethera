@@ -14,13 +14,12 @@ const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userBalance, setUserBalance] = useState(0);
   const [avatarInfo, setAvatar] = useState<Avatar | null>(null);
-  const [isUserCreator, setIsUserCreator] = useState(false);
 
   // Use the Circles SDK context
   const { sdk, circlesAddress, circlesProvider } =
     useContext(CirclesSDKContext);
 
-  const { user, fetchUserData, updateUserData, isCreator } = useUser();
+  const { user, fetchUserData, isCreator } = useUser();
 
   const getCRCBalance = async () => {
     try {
@@ -51,34 +50,10 @@ const Header = () => {
     setIsDropdownOpen(false); // Close dropdown after navigation
   };
 
-  const isCreatora = async (address: string): Promise<boolean> => {
-    try {
-      // Fetch user data from the [walletAddress] route
-      const response = await fetch(`/api/users/${address}`);
-
-      // If the response is not OK, the user does not exist
-      if (!response.ok) {
-        setIsUserCreator(false);
-        return false;
-      }
-
-      // Parse the response JSON
-      const user = await response.json();
-
-      // Check if the user is a creator
-      setIsUserCreator(user.isCreator);
-      return user.isCreator === true;
-    } catch (error) {
-      console.error("Error checking if user is a creator:", error);
-      throw new Error("Failed to check user status");
-    }
-  };
-
   useEffect(() => {
     getCRCBalance();
     if (circlesAddress) {
       fetchUserData(circlesAddress);
-      // isCreator(circlesAddress);
     }
   }, [circlesAddress, circlesProvider]);
   console.log(avatarInfo);

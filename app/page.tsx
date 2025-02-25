@@ -51,14 +51,7 @@ const Dashboard = () => {
   // Use the Circles SDK context
   const { isConnected, isLoading } = useContext(CirclesSDKContext);
   console.log("the isConnected in main page ", isConnected);
-  const {
-    user,
-    fetchUserData,
-    updateUserData,
-    isCreator,
-    contents,
-    allContents,
-  } = useUser();
+  const { allContents } = useUser();
 
   // Redirect to auth page if user is not connected
   useEffect(() => {

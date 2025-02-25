@@ -1,11 +1,5 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from "react";
-import User, { IUser } from "@/models/creator"; // Import your User model and IUser interface
+import { createContext, useContext, useState, ReactNode } from "react";
+import { IUser } from "@/models/creator";
 import { IContent } from "@/models/contents";
 
 // Define the shape of the context

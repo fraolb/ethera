@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import User from "@/models/creator";
 import Content from "@/models/contents";
 import dbConnect from "@/lib/mongodb";
 

@@ -46,7 +46,6 @@ const PostPage = () => {
 
     try {
       let contentLink = "";
-      let likes = 0;
 
       // Upload file to Cloudinary if content is not a blog
       if (contentType !== "blog") {
