@@ -34,12 +34,12 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       const response = await fetch(`/api/users/${walletAddress}`);
       if (!response.ok) {
         setIsCreator(false);
-        return;
+      } else {
+        const data: IUser = await response.json();
+        setUser(data);
+        console.log("user data found ", data);
+        setIsCreator(true);
       }
-      const data: IUser = await response.json();
-      setUser(data);
-      console.log("user data found ", data);
-      setIsCreator(true);
 
       const contentResponse = await fetch(
         `/api/users/content/${walletAddress}`
