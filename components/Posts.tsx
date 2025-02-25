@@ -5,7 +5,7 @@ import { IContent } from "@/models/contents";
 
 const PostGrid = ({ posts }: { posts: IContent[] }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-2 text-black">
       {posts.map((post) => (
         <PostCard key={post._id} post={post} />
       ))}

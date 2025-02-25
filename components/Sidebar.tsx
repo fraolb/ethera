@@ -17,7 +17,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="w-1/6 h-screen bg-white shadow-md p-5 hidden md:flex flex-col fixed top-0 left-0">
+    <div className="w-1/6 text-black h-screen bg-white shadow-md p-5 hidden md:flex flex-col fixed top-0 left-0">
       <div className="flex justify-center mb-6">
         <Image
           src={Logo}
