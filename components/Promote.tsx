@@ -12,7 +12,7 @@ interface ContentCardProps {
 
 const Promote: React.FC<ContentCardProps> = ({ cardTitle, contents }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden w-full max-w-xs">
+    <div className="bg-white shadow-md rounded-lg overflow-hidden w-full max-w-xs text-black">
       <h3 className="text-xl font-semibold text-gray-800 p-4 pb-2">
         {cardTitle}
       </h3>

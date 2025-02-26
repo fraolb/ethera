@@ -131,7 +131,7 @@ const PostPage = () => {
   };
 
   return (
-    <div className="flex w-full bg-gray-100">
+    <div className="flex w-full bg-gray-100 text-black">
       {notification && (
         <div
           className={`fixed top-0 left-1/2 transform -translate-x-1/2 mt-12 p-2 px-4 w-3/4 rounded shadow-lg z-10 ${

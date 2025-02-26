@@ -41,7 +41,7 @@ interface Category {
 
 const CategoryCard = () => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 mt-4 text-black">
       {categories.map((category) => (
         <Category key={category.id} category={category} />
       ))}

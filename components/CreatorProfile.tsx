@@ -5,7 +5,7 @@ import { IUser } from "@/models/creator";
 const CreatorProfile = ({ user }: { user: IUser }) => {
   const router = useRouter();
   return (
-    <div className="bg-white shadow-md p-6 rounded-md mb-4">
+    <div className="bg-white shadow-md p-6 rounded-md mb-4 text-black">
       <div className="flex items-center gap-4">
         {user.profileImg != "" && (
           <Image

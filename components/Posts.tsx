@@ -52,7 +52,7 @@ const PostCard = ({ post }: { post: IContent }) => {
     switch (post.contentType) {
       case "blog":
         return (
-          <div className="p-4 h-40 bg-gray-100 rounded-lg">
+          <div className="p-4 h-40 bg-gray-100 rounded-lg text-black">
             <h3 className="text-lg pt-6 font-semibold">{post.title}</h3>
             <p className="text-gray-600  text-sm truncate">
               Read the full blog post:{" "}

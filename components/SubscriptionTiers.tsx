@@ -1,6 +1,6 @@
 const SubscriptionTiers = () => {
   return (
-    <div className="bg-white p-4 shadow-md rounded-lg overflow-hidden w-full max-w-xs">
+    <div className="bg-white p-4 shadow-md rounded-lg overflow-hidden w-full max-w-xs text-black">
       <h3 className="font-bold mb-4 ">Subscription Tiers</h3>
 
       <SubscriptionPlan

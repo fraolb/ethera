@@ -11,7 +11,7 @@ import { useUser } from "@/app/contexts/UserContext";
 const Dashboard = () => {
   const { user, contents } = useUser();
   return (
-    <div className="flex w-full min-h-screen bg-gray-100">
+    <div className="flex w-full min-h-screen bg-gray-100 text-black">
       <div className="w-0 md:w-1/6">
         <Sidebar />
       </div>
