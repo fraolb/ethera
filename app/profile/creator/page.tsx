@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
+import { setSubscriptionTiers } from "@/utils/contract";
+import { ethers } from "ethers";
 
 interface notificationInterfact {
   message: string;
@@ -17,7 +19,7 @@ const CreatorPage = () => {
   const [tiers, setTiers] = useState({
     standard: "",
     premium: "",
-    other: "",
+    vip: "",
   });
   const [description, setDescription] = useState("");
   const [profile, setProfile] = useState<File | null>(null);
@@ -43,13 +45,28 @@ const CreatorPage = () => {
     setLoading(true);
 
     // Validate inputs
-    if (!tiers.standard || !tiers.premium || !tiers.other || !name) {
+    if (!tiers.standard || !tiers.premium || !tiers.vip || !name) {
       alert("Please fill in all fields.");
       setLoading(false);
       return;
     }
 
     try {
+      // Convert tier prices from ETH to wei
+      const tierPricesInWei: [bigint, bigint, bigint] = [
+        ethers.parseEther(tiers.standard), // Convert standard tier to wei
+        ethers.parseEther(tiers.premium), // Convert premium tier to wei
+        ethers.parseEther(tiers.vip), // Convert other tier to wei
+      ];
+
+      // Get the signer from the wallet (e.g., MetaMask)
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      // Call the setSubscriptionTiers function to update the smart contract
+      const txHash = await setSubscriptionTiers(signer, tierPricesInWei);
+      console.log("Transaction hash:", txHash);
+
       // Simulate API call or smart contract interaction
       console.log("Submitting tiers:", tiers);
 
@@ -118,9 +135,8 @@ const CreatorPage = () => {
       console.error("Error submitting tiers or creating user:", error);
 
       // Display the error message in an alert
-
       setNotification({
-        message: "error happened while creating user!",
+        message: "Error happened while creating user!",
         type: "error",
       });
     } finally {
@@ -130,7 +146,7 @@ const CreatorPage = () => {
   };
 
   return (
-    <div className="flex w-full min-h-screen">
+    <div className="flex w-full min-h-screen text-black bg-gray-100">
       {notification && (
         <div
           className={`fixed top-0 left-1/2 transform -translate-x-1/2 mt-12 p-2 px-4 w-3/4 rounded shadow-lg z-10 ${
@@ -258,16 +274,16 @@ const CreatorPage = () => {
 
                     <div>
                       <label
-                        htmlFor="other"
+                        htmlFor="vip"
                         className="block text-sm font-medium text-gray-700"
                       >
                         VIP Tier Price (CRC)
                       </label>
                       <input
                         type="number"
-                        id="other"
-                        name="other"
-                        value={tiers.other}
+                        id="vip"
+                        name="vip"
+                        value={tiers.vip}
                         onChange={handleInputChange}
                         className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
                         placeholder="Enter price in CRC"
