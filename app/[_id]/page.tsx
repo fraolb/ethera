@@ -25,6 +25,7 @@ export default function Page() {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(100);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
 
   const handleLike = () => {
     if (isLiked) {
@@ -70,6 +71,11 @@ export default function Page() {
       );
       setContent(foundContent);
       if (foundContent) {
+        // Check if the user is the owner of the content
+        if (circlesAddress === foundContent.walletAddress) {
+          setIsOwner(true);
+        }
+
         const checkSubscription = async () => {
           const subscribed = await isUserSubscribed(foundContent.walletAddress);
           setIsSubscribed(subscribed);
@@ -84,6 +90,8 @@ export default function Page() {
     return <div>Content not found</div>;
   }
 
+  console.log("userrss sub ", isSubscribed, "owner ", isOwner);
+
   return (
     <div className="flex w-full min-h-screen bg-gray-100 text-black">
       <div className="w-0 md:w-1/6">
@@ -94,11 +102,11 @@ export default function Page() {
         <Header />
         <div className="p-6 block md:grid md:grid-cols-4 gap-4">
           <div className="col-span-3">
-            <div className="bg-white shadow-md rounded-md mb-4 h-2/3 border border-solid mb-2">
-              {content.contentType === "image" && (
+            {isOwner == false && isSubscribed == false ? (
+              <div className="bg-white shadow-md rounded-md mb-4 h-1/3 border border-solid relative">
                 <Image
-                  src={content.contentLink}
-                  alt={content.title}
+                  src="https://images.unsplash.com/photo-1618022325802-7e5e732d97a1?q=80&w=1948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                  alt="Not subscribed"
                   width={100}
                   height={100}
                   style={{
@@ -106,21 +114,41 @@ export default function Page() {
                   }}
                   className="w-full h-full rounded-md"
                 />
-              )}
-              {content.contentType === "video" && (
-                <video
-                  controls
-                  src={content.contentLink}
-                  className="w-full h-full rounded-md"
-                />
-              )}
-              {content.contentType === "blog" && (
-                <div>
-                  <h1>{content.title}</h1>
-                  <p>{content.contentLink}</p>
-                </div>
-              )}
-            </div>
+
+                <h2 className="absolute inset-0 flex items-center justify-center text-white text-xl font-bold bg-black bg-opacity-50">
+                  Subscribe to watch!
+                </h2>
+              </div>
+            ) : (
+              <div className="bg-white shadow-md rounded-md mb-4 h-2/3 border border-solid">
+                {content.contentType === "image" && (
+                  <Image
+                    src={content.contentLink}
+                    alt={content.title}
+                    width={100}
+                    height={100}
+                    style={{
+                      objectFit: "cover",
+                    }}
+                    className="w-full h-full rounded-md"
+                  />
+                )}
+                {content.contentType === "video" && (
+                  <video
+                    controls
+                    src={content.contentLink}
+                    className="w-full h-full rounded-md"
+                  />
+                )}
+                {content.contentType === "blog" && (
+                  <div>
+                    <h1>{content.title}</h1>
+                    <p>{content.contentLink}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="bg-white block md:flex justify-between shadow-md p-6 py-4 rounded-md mb-4 mt-2">
               <div className="flex items-center gap-4">
                 {content.createdBy.profileImg != "" && (
