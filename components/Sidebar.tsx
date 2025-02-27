@@ -7,16 +7,18 @@ import Image from "next/image";
 import Logo from "@/public/etheraIcon.png";
 import { Home, Search, Mail, Banknote } from "lucide-react";
 import { fetchUserSubscriptions } from "@/utils/contract";
-import { useUser } from "@/app/contexts/UserContext";
-import { IContent } from "@/models/contents";
+
+interface creatorsData {
+  name: string;
+  walletAddress: string;
+}
 
 const Sidebar = () => {
   const router = useRouter();
-  const { allContents } = useUser();
   const { disconnectWallet, circlesAddress } = useContext(CirclesSDKContext);
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
   const [subscribedCreatorsNames, setSubscribedCreatorsNames] = useState<
-    string[]
+    creatorsData[]
   >([]);
 
   const handleDisconnectWallet = async () => {
@@ -38,12 +40,15 @@ const Sidebar = () => {
       }
 
       // Fetch creator names from the database
-      const names: string[] = [];
+      const data: creatorsData[] = [];
       for (const subscription of subscriptions) {
         const response = await fetch(`/api/users/${subscription.creator}`);
         if (response.ok) {
           const user = await response.json();
-          names.push(user.creator); // Assuming the API returns an object with a `creator` field
+          data.push({
+            name: user.creator,
+            walletAddress: subscription.creator,
+          }); // Assuming the API returns an object with a `creator` field
         } else {
           console.error("Failed to fetch user:", subscription.creator);
         }
@@ -51,7 +56,7 @@ const Sidebar = () => {
 
       // Update state
       setSubscriptions(subscriptions);
-      setSubscribedCreatorsNames(names);
+      setSubscribedCreatorsNames(data);
     } catch (error) {
       console.error("Error fetching subscriptions:", error);
     }
@@ -77,7 +82,7 @@ const Sidebar = () => {
       </div>
 
       <nav className="space-y-2">
-        <SidebarItem icon={Home} route="/" text="Feed" badge={37} />
+        <SidebarItem icon={Home} route="/" text="Feed" />
         <SidebarItem icon={Search} text="Explore" />
         <SidebarItem icon={Mail} text="Messages" />
         <SidebarItem icon={Banknote} text="Payment" />
@@ -87,8 +92,8 @@ const Sidebar = () => {
         <h3 className="font-semibold mb-2">Subscriptions</h3>
         {subscribedCreatorsNames.length > 0 ? (
           <ul>
-            {subscribedCreatorsNames.map((name, index) => (
-              <SidebarItem key={index} text={name} />
+            {subscribedCreatorsNames.map((i, index) => (
+              <SidebarItem key={index} text={i.name} route={i.walletAddress} />
             ))}
           </ul>
         ) : (
@@ -126,7 +131,7 @@ const SidebarItem = ({
       className="flex items-center justify-between p-2 hover:bg-gray-200 rounded-md cursor-pointer"
       onClick={() => {
         if (route) {
-          router.push(route);
+          router.push(`/profile/${route}`);
         }
       }}
     >
