@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState, useContext } from "react";
+import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { useUser } from "@/app/contexts/UserContext";
 import Sidebar from "@/components/Sidebar";
@@ -15,6 +16,7 @@ import { fetchUserSubscriptions } from "@/utils/contract";
 
 export default function Page() {
   const params = useParams();
+  const router = useRouter();
   const { _id } = params; // Access the _id parameter from the URL
   const { circlesAddress } = useContext(CirclesSDKContext);
 
@@ -127,11 +129,19 @@ export default function Page() {
                     alt="Profile"
                     width={100}
                     height={100}
-                    className="w-16 h-16 rounded-full"
+                    className="w-16 h-16 rounded-full cursor-pointer"
+                    onClick={() => {
+                      router.push(`/profile/${content.walletAddress}`);
+                    }}
                   />
                 )}
 
-                <div>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    router.push(`/profile/${content.walletAddress}`);
+                  }}
+                >
                   <h2 className="text-xl font-bold">
                     {content.createdBy.creator}
                   </h2>
@@ -154,7 +164,7 @@ export default function Page() {
               </div>
               <div>
                 <button
-                  className={`flex mb-2 items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm ${
+                  className={`flex mb-2 mt-2 items-center gap-2 px-4 py-2 rounded-full font-semibold text-sm ${
                     isLiked
                       ? "bg-blue-100 text-orange-700 hover:bg-blue-200" // Liked state
                       : "bg-gray-200 text-gray-700 hover:bg-gray-300" // Like state

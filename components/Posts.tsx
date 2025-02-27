@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { IContent } from "@/models/contents";
+import Image from "next/image";
 
 const PostGrid = ({ posts }: { posts: IContent[] }) => {
   return (
@@ -103,13 +104,26 @@ const PostCard = ({ post }: { post: IContent }) => {
           </span>
         )}
       </div>
+      <div className="flex items-center">
+        <Image
+          src={
+            post.createdBy.profileImg !== ""
+              ? post.createdBy.profileImg
+              : "https://images.unsplash.com/photo-1618022325802-7e5e732d97a1?q=80&w=1948&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          }
+          alt="Profile"
+          width={100}
+          height={100}
+          className="w-12 h-12 rounded-full ml-2"
+        />
 
-      <div className="p-4 pt-0">
-        <h3 className="text-lg font-semibold">{post.title}</h3>
-        <h4 className="text-sm">{post.createdBy.creator}</h4>
-        <div className="mt-4 flex justify-between text-sm text-gray-500">
-          <span>{formatDate(post.createdAt)}</span>
-          <span>👍 {post.likes != 0 && post.likes}</span>
+        <div className="p-4 pt-0 w-4/5">
+          <h3 className="text-lg font-semibold">{post.title}</h3>
+          <h4 className="text-sm">{post.createdBy.creator}</h4>
+          <div className=" flex justify-between text-sm text-gray-500">
+            <span>{formatDate(post.createdAt)}</span>
+            <span>👍 {post.likes != 0 && post.likes}</span>
+          </div>
         </div>
       </div>
     </div>
