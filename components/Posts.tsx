@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const PostGrid = ({ posts }: { posts: IContent[] }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-2 text-black">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-2 text-black">
       {posts.map((post) => (
         <PostCard key={post._id} post={post} />
       ))}
@@ -117,9 +117,9 @@ const PostCard = ({ post }: { post: IContent }) => {
           className="w-12 h-12 rounded-full ml-2"
         />
 
-        <div className="p-4 pt-0 w-4/5">
-          <h3 className="text-lg font-semibold">{post.title}</h3>
-          <h4 className="text-sm">{post.createdBy.creator}</h4>
+        <div className="p-4 pt-0 w-3/4">
+          <h3 className="text-md font-semibold truncate">{post.title}</h3>
+          <h4 className="text-sm truncate">{post.createdBy.creator}</h4>
           <div className=" flex justify-between text-sm text-gray-500">
             <span>{formatDate(post.createdAt)}</span>
             <span>👍 {post.likes != 0 && post.likes}</span>

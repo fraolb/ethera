@@ -55,7 +55,7 @@ const LoginPage = () => {
           console.log("go to dashboard ", isConnected);
           router.push("/"); // Redirect to dashboard if avatar exists
         } else {
-          router.push("/onboarding"); // Redirect to onboarding if no avatar
+          router.push("/auth/signup"); // Redirect to onboarding if no avatar
         }
       });
     }

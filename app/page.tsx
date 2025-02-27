@@ -44,6 +44,40 @@ const dummyPosts = [
     views: 1800000,
   },
 ];
+const dummyPosts2 = [
+  {
+    id: 1,
+    title: "A Dream come true",
+    description: "On my latest work...",
+    image:
+      "https://images.unsplash.com/photo-1581368129682-e2d66324045b?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    isLocked: true,
+    likes: 23,
+    saved: 12,
+    views: 1800000,
+  },
+  {
+    id: 2,
+    title: "Painting is my life",
+    description: "Okoro the dreamer living in kenya...",
+    image:
+      "https://images.unsplash.com/photo-1625682109605-9e535ed19636?q=80&w=2008&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    isPremium: true,
+    likes: 12,
+    saved: 4,
+    views: 1800000,
+  },
+  {
+    id: 3,
+    title: "Solo Beat",
+    description: "Artist Shagiz",
+    image:
+      "https://images.unsplash.com/photo-1612295673708-6faf3b14f0eb?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    likes: 30,
+    saved: 15,
+    views: 1800000,
+  },
+];
 
 const Dashboard = () => {
   const router = useRouter();
@@ -90,7 +124,7 @@ const Dashboard = () => {
           </div>
           <div className="flex flex-col gap-4 mt-4 ">
             <Promote cardTitle="trending" contents={dummyPosts} />
-            <Promote cardTitle="Most Viewed" contents={dummyPosts} />
+            <Promote cardTitle="Most Viewed" contents={dummyPosts2} />
           </div>
         </div>
       </div>
