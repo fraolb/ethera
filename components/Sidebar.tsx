@@ -67,6 +67,7 @@ const Sidebar = () => {
       getUserSubscriptions(circlesAddress);
     }
   }, [circlesAddress]);
+  console.log("subscriptions are ", subscriptions);
 
   return (
     <div className="w-1/6 text-black h-screen bg-white shadow-md p-5 hidden md:flex flex-col fixed top-0 left-0">

@@ -29,12 +29,6 @@ const Dashboard = () => {
     ? walletAddress[0] // Use the first item if it's an array
     : walletAddress;
 
-  // Redirect or show error if walletAddress is invalid
-  if (!normalizedWalletAddress) {
-    router.push("/"); // Redirect to home or another page
-    return null;
-  }
-
   const fetchCreatorContents = async (address: string) => {
     try {
       const response = await fetch(`/api/users/${address}`);
@@ -92,7 +86,10 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (!normalizedWalletAddress) return;
+    if (!normalizedWalletAddress || normalizedWalletAddress == undefined) {
+      router.push("/");
+      return;
+    }
 
     const checkSubscription = async () => {
       const subscribed = await isUserSubscribed(normalizedWalletAddress);
@@ -161,7 +158,9 @@ const Dashboard = () => {
                 </h3>
               </div>
             ) : (
-              <SubscriptionTiers creatorAddress={normalizedWalletAddress} />
+              normalizedWalletAddress != undefined && (
+                <SubscriptionTiers creatorAddress={normalizedWalletAddress} />
+              )
             )}
             {normalizedWalletAddress && (
               <DonationSection recipient={normalizedWalletAddress} />
