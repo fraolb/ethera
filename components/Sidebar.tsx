@@ -1,20 +1,67 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import CirclesSDKContext from "@/app/contexts/CirclesSDK";
 import Image from "next/image";
 import Logo from "@/public/etheraIcon.png";
 import { Home, Search, Mail, Banknote } from "lucide-react";
+import { fetchUserSubscriptions } from "@/utils/contract";
+import { useUser } from "@/app/contexts/UserContext";
+import { IContent } from "@/models/contents";
 
 const Sidebar = () => {
   const router = useRouter();
-  const { disconnectWallet } = useContext(CirclesSDKContext);
+  const { allContents } = useUser();
+  const { disconnectWallet, circlesAddress } = useContext(CirclesSDKContext);
+  const [subscriptions, setSubscriptions] = useState<any[]>([]);
+  const [subscribedCreatorsNames, setSubscribedCreatorsNames] = useState<
+    string[]
+  >([]);
 
   const handleDisconnectWallet = async () => {
     await disconnectWallet();
     router.push("/auth");
   };
+
+  const getUserSubscriptions = async (walletAddress: string) => {
+    try {
+      // Fetch subscriptions from the smart contract
+      const subscriptions = await fetchUserSubscriptions(walletAddress);
+      console.log("Parsed subscriptions:", subscriptions);
+
+      if (subscriptions.length === 0) {
+        console.log("No subscriptions found for this user.");
+        setSubscriptions([]);
+        setSubscribedCreatorsNames([]);
+        return;
+      }
+
+      // Fetch creator names from the database
+      const names: string[] = [];
+      for (const subscription of subscriptions) {
+        const response = await fetch(`/api/users/${subscription.creator}`);
+        if (response.ok) {
+          const user = await response.json();
+          names.push(user.creator); // Assuming the API returns an object with a `creator` field
+        } else {
+          console.error("Failed to fetch user:", subscription.creator);
+        }
+      }
+
+      // Update state
+      setSubscriptions(subscriptions);
+      setSubscribedCreatorsNames(names);
+    } catch (error) {
+      console.error("Error fetching subscriptions:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (circlesAddress) {
+      getUserSubscriptions(circlesAddress);
+    }
+  }, [circlesAddress]);
 
   return (
     <div className="w-1/6 text-black h-screen bg-white shadow-md p-5 hidden md:flex flex-col fixed top-0 left-0">
@@ -38,8 +85,16 @@ const Sidebar = () => {
 
       <div className="mt-auto">
         <h3 className="font-semibold mb-2">Subscriptions</h3>
-        <SidebarItem text="Brooklyn Simmons" />
-        <SidebarItem text="Alisa Flores" />
+        {subscribedCreatorsNames.length > 0 ? (
+          <ul>
+            {subscribedCreatorsNames.map((name, index) => (
+              <SidebarItem key={index} text={name} />
+            ))}
+          </ul>
+        ) : (
+          <p>No subscriptions found.</p>
+        )}
+
         <div className="flex justify-center">
           <button
             className="mt-4 text-red-500 px-6 py-2 border border-red-500 rounded-md hover:bg-red-500 hover:text-white"
