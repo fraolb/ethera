@@ -44,7 +44,7 @@ export default function Page() {
   }
 
   return (
-    <div className="flex w-full min-h-screen bg-gray-100">
+    <div className="flex w-full min-h-screen bg-gray-100 text-black">
       <div className="w-0 md:w-1/6">
         <Sidebar />
       </div>
@@ -125,8 +125,8 @@ export default function Page() {
             </div>
           </div>
           <div className="flex flex-col gap-4 mt-4 ">
-            <SubscriptionTiers />
-            <DonationSection />
+            <SubscriptionTiers creatorAddress={content.walletAddress} />
+            <DonationSection recipient={content.walletAddress} />
           </div>
         </div>
       </div>
