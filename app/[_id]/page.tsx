@@ -1,19 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "next/navigation";
 import { useUser } from "@/app/contexts/UserContext";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
+import CirclesSDKContext from "../contexts/CirclesSDK";
 import DonationSection from "@/components/DonationSection";
 import SubscriptionTiers from "@/components/SubscriptionTiers";
 import { IContent } from "@/models/contents";
 import { ThumbsUp } from "lucide-react";
+import { fetchUserSubscriptions } from "@/utils/contract";
 
 export default function Page() {
   const params = useParams();
   const { _id } = params; // Access the _id parameter from the URL
+  const { circlesAddress } = useContext(CirclesSDKContext);
 
   const { allContents } = useUser();
   const [content, setContent] = useState<IContent | undefined>(undefined);
@@ -30,12 +33,48 @@ export default function Page() {
     setIsLiked(!isLiked); // Toggle like state
   };
 
+  const isUserSubscribed = async (walletAddress: string): Promise<boolean> => {
+    try {
+      if (!circlesAddress) {
+        console.log("User wallet address is not available.");
+        return false;
+      }
+
+      // Fetch subscriptions from the smart contract
+      const subscriptions = await fetchUserSubscriptions(circlesAddress);
+      console.log("Parsed subscriptions:", subscriptions);
+
+      if (subscriptions.length === 0) {
+        console.log("No subscriptions found for this user.");
+        return false;
+      }
+
+      // Check if the creator's address is in the subscription list
+      const isSubscribed = subscriptions.some(
+        (subscription: any) => subscription.creator === walletAddress
+      );
+
+      return isSubscribed;
+    } catch (error) {
+      console.error("Error fetching subscriptions:", error);
+      return false;
+    }
+  };
+
   useEffect(() => {
     if (allContents) {
       const foundContent: IContent | undefined = allContents.find(
         (c) => c._id === _id
       );
       setContent(foundContent);
+      if (foundContent) {
+        const checkSubscription = async () => {
+          const subscribed = await isUserSubscribed(foundContent.walletAddress);
+          setIsSubscribed(subscribed);
+        };
+
+        checkSubscription();
+      }
     }
   }, [allContents, _id]);
 
@@ -53,21 +92,25 @@ export default function Page() {
         <Header />
         <div className="p-6 block md:grid md:grid-cols-4 gap-4">
           <div className="col-span-3">
-            <div className="bg-white shadow-md rounded-md mb-4 h-2/3 ">
+            <div className="bg-white shadow-md rounded-md mb-4 h-2/3 border border-solid mb-2">
               {content.contentType === "image" && (
                 <Image
                   src={content.contentLink}
                   alt={content.title}
-                  width={100} // Set width to 0 to allow the container to control the size
-                  height={100} // Set height to 0 to allow the container to control the size
+                  width={100}
+                  height={100}
                   style={{
-                    objectFit: "cover", // Ensures the image fits within the container while maintaining aspect ratio
+                    objectFit: "cover",
                   }}
                   className="w-full h-full rounded-md"
                 />
               )}
               {content.contentType === "video" && (
-                <video controls src={content.contentLink} />
+                <video
+                  controls
+                  src={content.contentLink}
+                  className="w-full h-full rounded-md"
+                />
               )}
               {content.contentType === "blog" && (
                 <div>
@@ -103,7 +146,7 @@ export default function Page() {
                         ? "bg-gray-200 text-black hover:bg-gray-300" // Subscribed state
                         : "bg-orange-600 text-white hover:bg-orange-700" // Subscribe state
                     } transition-colors duration-200`}
-                    onClick={() => setIsSubscribed(!isSubscribed)}
+                    // onClick={() => setIsSubscribed(!isSubscribed)}
                   >
                     {isSubscribed ? "Subscribed" : "Subscribe"}
                   </button>
@@ -125,7 +168,16 @@ export default function Page() {
             </div>
           </div>
           <div className="flex flex-col gap-4 mt-4 ">
-            <SubscriptionTiers creatorAddress={content.walletAddress} />
+            {isSubscribed ? (
+              <div className="bg-white p-4 pt-8 shadow-md rounded-lg overflow-hidden w-full max-w-xs text-black">
+                <h3 className="font-bold mb-4">
+                  You are already Subscribed 😊
+                </h3>
+              </div>
+            ) : (
+              <SubscriptionTiers creatorAddress={content.walletAddress} />
+            )}
+
             <DonationSection recipient={content.walletAddress} />
           </div>
         </div>
