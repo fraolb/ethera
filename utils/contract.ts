@@ -102,3 +102,29 @@ export const subscribeToCreator = async (
     throw error;
   }
 };
+
+export const tipCreator = async (
+  signer: ethers.Signer,
+  recipient: string,
+  amount: number
+) => {
+  try {
+    // Get the contract instance with the signer
+    const contract = getCRCTokenContract(signer);
+
+    // Convert the amount to wei (assuming CRC tokens have 18 decimals)
+    const amountInWei = ethers.parseEther(amount.toString());
+
+    // Send the transaction
+    const transaction = await contract.transfer(recipient, amountInWei);
+
+    // Wait for the transaction to be mined
+    await transaction.wait();
+
+    console.log("Transaction successful:", transaction.hash);
+    return transaction.hash;
+  } catch (error) {
+    console.error("Error setting subscription tiers:", error);
+    throw error;
+  }
+};
