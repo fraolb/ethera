@@ -29,7 +29,7 @@ const CreatorProfile = ({ user }: { user: IUser }) => {
         </div>
       </div>
 
-      <div className="flex justify-between mt-4">
+      {/* <div className="flex justify-between mt-4">
         <p>
           <strong>3487</strong> Subscribers
         </p>
@@ -39,7 +39,7 @@ const CreatorProfile = ({ user }: { user: IUser }) => {
         <p>
           <strong>1593</strong> Likes
         </p>
-      </div>
+      </div> */}
       {circlesAddress && circlesAddress == user.walletAddress && (
         <div className="flex mt-8 gap-8">
           <h3 className="font-bold mb-2 pt-2">Post a new content</h3>

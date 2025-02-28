@@ -7,9 +7,13 @@ import Image from "next/image";
 const PostGrid = ({ posts }: { posts: IContent[] }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-2 text-black">
-      {posts.map((post) => (
-        <PostCard key={post._id} post={post} />
-      ))}
+      {posts
+        .slice()
+        .reverse()
+        .slice(0, 8)
+        .map((post) => (
+          <PostCard key={post._id} post={post} />
+        ))}
     </div>
   );
 };
